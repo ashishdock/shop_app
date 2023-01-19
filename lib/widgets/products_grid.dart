@@ -9,10 +9,15 @@ class ProductsGrid extends StatelessWidget {
   //   @required this.loadedProducts,
   // }) : super(key: key);
 
+  final bool showFavs;
+
+  ProductsGrid({this.showFavs});
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
-    final loadedProducts = productsData.items;
+    final loadedProducts =
+        showFavs ? productsData.favoriteItems : productsData.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: loadedProducts.length,
@@ -23,8 +28,8 @@ class ProductsGrid extends StatelessWidget {
         mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) {
-        return ChangeNotifierProvider(
-          create: (context) => loadedProducts[index],
+        return ChangeNotifierProvider.value(
+          value: loadedProducts[index],
           child: ProductItem(
               // id: loadedProducts[index].id,
               // title: loadedProducts[index].title,

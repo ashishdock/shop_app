@@ -37,10 +37,30 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  // var _showFavoritesOnly = false;
+
   List<Product> get items {
+    // if (_showFavoritesOnly) {
+    //   return _items.where((product) => product.isFavorite).toList();
+    // } else {
     return [..._items];
+    // }
     // we are returning a copy of the original and not the original (meaning the address, so that we can't directly update the list item variable, because if we did, we won't be able to call notifyListeners. Now, in this way, by making a function we are calling notifyListeners along with additin to the list.)
   }
+
+  List<Product> get favoriteItems {
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+  // void showFavoritesOnly() {
+  //   _showFavoritesOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoritesOnly = false;
+  //   notifyListeners();
+  // }
 
   void addProduct(value) {
     _items.add(value);
