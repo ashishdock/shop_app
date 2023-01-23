@@ -82,7 +82,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -93,15 +93,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
       print('isLoading set to true');
     });
+
     if (_editedProduct.id != null) {
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
-      Navigator.pop(context);
+      print(_editedProduct.id);
+      print(_editedProduct);
+      // setState(
+      //   () {
+      //     _isLoading = false;
+      //     print("isLoading set to false");
+      //   },
+      // );
+
+      // Navigator.pop(context);
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog<Null>(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(
@@ -118,18 +129,24 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then(
-        (_) {
-          setState(
-            () {
-              _isLoading = false;
-              print("isLoading set to false");
-            },
-          );
-          Navigator.pop(context);
-        },
-      );
+      }
+      //  finally {
+      //   setState(
+      //     () {
+      //       _isLoading = false;
+      //       print("isLoading set to false");
+      //     },
+      //   );
+      //   Navigator.pop(context);
+      // }
     }
+    setState(
+      () {
+        _isLoading = false;
+        print("isLoading set to false");
+      },
+    );
+    Navigator.pop(context);
   }
 
   @override
