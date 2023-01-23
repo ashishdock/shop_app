@@ -75,7 +75,7 @@ class Products with ChangeNotifier {
     // final url2 = Uri.https(
     // 'https://shop-app-flutter-55669-default-rtdb.asia-southeast1.firebasedatabase.app/',
     // '/produts.json');
-    http
+    return http
         .post(
       url,
       body: json.encode(
@@ -100,7 +100,10 @@ class Products with ChangeNotifier {
         _items.add(newProduct);
         notifyListeners();
       },
-    );
+    ).catchError((error) {
+      print(error);
+      throw error;
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
