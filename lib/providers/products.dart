@@ -91,6 +91,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
+            'creatorId': userId,
           },
         ),
       );
@@ -109,9 +110,12 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    //square brackets around a function's arguments make it optional but we have to give a default value
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : "";
     final url =
-        'https://shop-app-flutter-55669-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$authToken';
+        'https://shop-app-flutter-55669-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$authToken&$filterString';
     try {
       final response = await http.get(url);
       final List<Product> loadedProducts = [];
